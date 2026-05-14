@@ -6,10 +6,11 @@ public class main{
         int n = Integer.parseInt(args[0]);
         double[][] matriz = new double[n][n];
         double[] vetor = new double[n];
+        //Montagem das equações de cada processador
         for(int i = 0; i < n; i++){
             int processador = i + 1;
             matriz[i][i] = 1.0;
-            int anterior1 = ((i - 1) + n) % n;
+            int anterior1 = ((i - 1) + n) % n; 
             int processadorAnterior1 = anterior1 + 1;
             double probabilidade1 = (double)(n + 1 - processadorAnterior1) / (n + 1);
             matriz[i][anterior1] -= probabilidade1;
@@ -17,10 +18,12 @@ public class main{
             int processadorAnterior2 = anterior2 + 1;
             double probabilidade2 = (double)(processadorAnterior2 - 1) / (n + 1);
             matriz[i][anterior2] -= probabilidade2;
-            if (processador == 1) {
+            if (processador == 1) { 
                 vetor[i] = 1.0;
             }
         }
+
+        //faz pivotamento e eliminação de gauss
         for(int coluna = 0; coluna < n; coluna++){
             int melhor = coluna;
             for(int linha = coluna + 1; linha < n; linha++){
@@ -28,7 +31,8 @@ public class main{
                     melhor = linha;
                 }
             }
-            
+
+            //troca as linhas de lugar
             double[] auxLinha = matriz[coluna];
             matriz[coluna] = matriz[melhor];
             matriz[melhor] = auxLinha;
@@ -36,6 +40,7 @@ public class main{
             vetor[coluna] = vetor[melhor];  
             vetor[melhor] = auxVetor;
 
+            //gauss - zerando o nro abaixo do pivô
             for(int linha = coluna + 1; linha < n; linha++){
                 double fator = matriz[linha][coluna] / matriz[coluna][coluna];
                 for(int k = coluna; k < n; k++){
@@ -46,7 +51,7 @@ public class main{
         }
 
         double[] resultado = new double[n];
-
+        //vai resolvendo a equação de baixo para cima
         for(int i = n - 1; i >= 0; i--){
             resultado[i] = vetor[i];
             for(int j = i + 1; j < n; j++){
@@ -59,6 +64,7 @@ public class main{
         int processadorMaior = 0;
         int processadorMenor = 0;
 
+        //cálculo do maior e menor processador em nro de pedidos
         for(int i = 0; i < n; i++){
             total += resultado[i];
             if(resultado[i] > resultado[processadorMaior]){
@@ -68,7 +74,6 @@ public class main{
                 processadorMenor = i;
             }
         }
-
         System.out.println("Total de pedidos no sistema: " + total);
         System.out.println("Processador com mais pedidos: " + (processadorMaior + 1) + " com " + resultado[processadorMaior] + " pedidos"); 
         System.out.println("Processador com menos pedidos: " + (processadorMenor + 1) + " com " + resultado[processadorMenor] + " pedidos");
